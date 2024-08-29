@@ -27,7 +27,7 @@
         {
             "customType": "regex",
             "fileMatch": [
-                "parts/linux/cloud-init/artifacts/test_components_simple.json"
+                "test_components_simple.json"
             ],
             "matchStringsStrategy": "any",
             "matchStrings": [
