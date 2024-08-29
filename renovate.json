@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": ["custom.regex"],
+  "prConcurrentLimit": 50,
+  "prHourlyLimit": 20,
+  "branchConcurrentLimit": 50,
+  "logLevelRemap": [
+    {
+      "matchMessage": "/^Custom manager fetcher/",
+      "newLogLevel": "info"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": false
+    },
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "parts/linux/cloud-init/artifacts/test_components_simple.json"
+      ],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        "\"renovateTag\":\\s*\"name=(?<packageName>[^ ]+) os=ubuntu release=22\\.04\",\\s*\"latestVersion\":\\s*\"(?<currentValue>[^\"]+)\\S*\\s*\"secondLatestVersion\".*"
+      ],
+      "datasourceTemplate": "custom.deb2204",
+      "versioningTemplate": "deb",
+      "autoReplaceStringTemplate": "\"renovateTag\": \"name=moby-containerd os=ubuntu release=22\\.04\",\n\"latestVersion\": \"1.99.1\",\n\"secondLatestVersion\": \"1.88.0\""
+    }
+  ],
+  "customDatasources": {
+    "deb2204": {
+      "defaultRegistryUrlTemplate": "https://packages.microsoft.com/ubuntu/22.04/prod/dists/testing/main/binary-amd64/Packages",
+      "format": "plain",
+      "transformTemplates": [
+        "{\"releases\": $map(($index := releases#$i[version=\"Package: {{packageName}}\"].$i; $map($index, function($i) { $replace(releases[$i + 1].version, /^Version:\\s*/, \"v\") })), function($v) { {\"version\": $v} })}"
+      ]
+    }
+  }
+}
