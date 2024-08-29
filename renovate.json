@@ -35,7 +35,7 @@
             ],
             "datasourceTemplate": "custom.deb2204",
             "versioningTemplate": "deb",
-            "autoReplaceStringTemplate": ""
+            "autoReplaceStringTemplate": "\"renovateTag\": \"name=moby-containerd os=ubuntu release=22\\.04\",\n\"latestVersion\": \"{{{newVersion}}}\",\n\"secondLatestVersion\": \"{{{currentValue}}}\""
         }
     ],
     "customDatasources": {
